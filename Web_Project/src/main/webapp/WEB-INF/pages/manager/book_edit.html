@@ -1,0 +1,126 @@
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="@{/}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="static/script/vue.js"></script>
+    <link rel="stylesheet" href="static/css/minireset.css" />
+    <link rel="stylesheet" href="static/css/common.css" />
+    <link rel="stylesheet" href="static/css/style.css" />
+    <link rel="stylesheet" href="static/css/cart.css" />
+    <link rel="stylesheet" href="static/css/bookManger.css" />
+    <link rel="stylesheet" href="static/css/register.css" />
+    <link rel="stylesheet" href="static/css/book_edit.css" />
+</head>
+<body>
+<div id="app">
+    <div class="header">
+        <div class="w">
+            <div class="header-left" >
+                <a href="index.html">
+                    <img src="static/img/logo.gif" alt=""
+                    /></a>
+                <h1>编辑图书</h1>
+            </div>
+            <div class="header-right" th:include="manager/base::header">
+            </div>
+        </div>
+    </div>
+    <div class="login_banner">
+        <div class="register_form">
+            <form action="book?flag=Edit" method="post" @submit="check">
+                <input type="hidden" name="bookId" th:value="${book.bookId}">
+                <input type="hidden" name="imgPath" th:value="${book.imgPath}">
+                <div class="form-item">
+                    <div>
+                        <label>名称:</label>
+                        <input type="text" placeholder="请输入名称" th:value="${book.bookName}" v-model="Name.value" @blur="check_name" name="bookName"/>
+                    </div>
+                    <span class="errMess" style="visibility: visible;"
+                          v-if="Name.flag===false"
+                    >请输入正确的名称</span
+                    >
+                </div>
+                <div class="form-item">
+                    <div>
+                        <label>价格:</label>
+                        <input type="number" placeholder="请输入价格" v-model="price.value"  @blur="check_price" name="price"/>
+                    </div>
+                    <span class="errMess"  v-if="price.flag===false">请输入正确数字</span>
+                </div>
+                <div class="form-item">
+                    <div>
+                        <label>作者:</label>
+                        <input type="text" placeholder="请输入作者" v-model="writer.value"  @blur="check_writer" name="author"/>
+                    </div>
+                    <span class="errMess" v-if="writer.flag===false">请输入正确作者</span>
+                </div>
+                <div class="form-item">
+                    <div>
+                        <label>销量:</label>
+                        <input type="number" placeholder="请输入销量" v-model="count.value"  @blur="check_count" name="sales"/>
+                    </div>
+                    <span class="errMess" v-if="count.flag===false">请输入正确销量</span>
+                </div>
+                <div class="form-item">
+                    <div>
+                        <label>库存:</label>
+                        <input type="number" placeholder="请输入库存"  v-model="count2.value" @blur="check_count2" name="stock"/>
+                    </div>
+                    <span class="errMess" v-if="count2.flag===false">请输入正确库存</span>
+                </div>
+                <button class="btn">提交</button>
+            </form>
+        </div>
+    </div>
+    <div class="bottom">
+        源味书屋书城.Copyright ©2015
+    </div>
+</div>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            Name: {flag: false, value: "[[${book.bookName}]]"},
+            count: {flag: false, value: "[[${book.sales}]]"},
+            count2: {flag: false, value: "[[${book.stock}]]"},
+            price: {flag: false, value: "[[${book.price}]]"},
+                //                errormsg:"[[${errMsg==null?'请输入用户名和密码':errMsg}]]",
+            writer:{flag:false,value:"[[${book.author}]]"}
+        },
+        methods: {
+            check() {
+                if (this.Name.flag === false || this.count.flag === false || this.price.flag === false) {
+                    event.preventDefault();
+                }
+            },
+            check_name() {
+                var reg=/^[\u4e00-\u9fa5a-zA-Z0-9_-]{2,16}$/
+                if (this.Name.value != null)
+                    this.Name.flag = reg.test(this.Name.value);
+            }, check_price() {
+                var reg = /^\d+$/;
+                if (this.price.value != null)
+                    this.price.flag = reg.test(this.price.value);
+            }, check_count() {
+                var reg = /^\d+$/;
+                if (this.count.value != null)
+                    this.count.flag = reg.test(this.count.value);
+            },check_count2() {
+                var reg = /^\d+$/;
+                if (this.count2.value != null)
+                    this.count2.flag = reg.test(this.count2.value);
+            },
+            check_writer() {
+                var reg=/^[\u4e00-\u9fa5a-zA-Z0-9_-]{2,16}$/
+                if (this.writer.value != null)
+                    this.writer.flag = reg.test(this.writer.value);
+            }
+        }
+    })
+</script>
+</body>
+
+</html>

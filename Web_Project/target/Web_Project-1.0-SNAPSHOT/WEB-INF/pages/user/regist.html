@@ -1,0 +1,178 @@
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="@{/}">
+    <meta charset="UTF-8"/>
+    <title>源味书屋会员注册页面</title>
+    <link type="text/css" rel="stylesheet" href="static/css/style.css"/>
+    <link rel="stylesheet" href="static/css/register.css"/>
+    <style type="text/css">
+        .login_form {
+            height: 420px;
+            margin-top: 25px;
+        }
+    </style>
+    <script src="static/script/vue.js"></script>
+    <script src="static/script/axios.min.js"></script>
+</head>
+<body>
+<div id="app">   <!-- 解决办法 -->
+    <div id="login_header">
+        <a href="index.html">
+            <img class="logo_img" alt="" src="static/img/logo.gif"/>
+        </a>
+    </div>
+
+    <div class="login_banner">
+        <div class="register_form">
+            <h1>注册源味书屋会员</h1>
+            <form action="user?flag=regist" method="post" @submit="check_all">
+                <div class="form-item">
+                    <div>
+                        <label>用户名称:</label>
+                        <input type="text" placeholder="请输入用户名" name="name" v-model="name.value"
+                               @blur="check_infoac()"/>
+                    </div>
+<!--                    <span class="errMess" v-if="name.flag==false">用户名应为6~16位数组和字母组成</span>-->
+                    <span class="errMess">{{name.error}}</span>
+                </div>
+                <div class="form-item">
+                    <div>
+                        <label>用户密码:</label>
+                        <input type="password" placeholder="请输入密码" name="pwd" v-model="pwd.value"
+                               @blur="check_infopwd()"/>
+                    </div>
+                    <span class="errMess">{{pwd.error}}</span>
+<!--                    <span class="errMess" v-else>√</span>-->
+                </div>
+                <div class="form-item">
+                    <div>
+                        <label>确认密码:</label>
+                        <input type="password" placeholder="请输入确认密码" v-model="rpwd.value"
+                               @blur="check_inforpwd()"/>
+                    </div>
+                    <span class="errMess">{{rpwd.error}}</span>
+<!--                    <span class="errMess" v-else>√</span>-->
+                </div>
+                <div class="form-item">
+                    <div>
+                        <label>用户邮箱:</label>
+                        <input type="text" placeholder="请输入邮箱" name="email" v-model="email.value"
+                               @blur="check_email()"/>
+                    </div>
+                    <span class="errMess" >{{email.error}}</span>
+<!--                    <span class="errMess" v-else>√</span>-->
+                </div>
+
+                <div class="form-item">
+                    <div>
+                        <label>验证码:</label>
+                        <div class="verify">
+                            <input type="text" placeholder="" name="rcode" v-model="c"/>
+                            <img :src=codeSrc alt="" height="45px" width="100px" @click="change_img"/>
+                        </div>
+                    </div>
+                    <span class="errMess">{{errorMsg}}</span>
+                </div>
+                <button class="btn">注册</button>
+            </form>
+        </div>
+    </div>
+    <div id="bottom">
+      <span>
+        源味书屋书城.create in 2023
+      </span>
+    </div>
+</div>
+<script>
+    new Vue({
+            el: "#app",
+            data: {
+                name: {value: "[[${name}]]", flag: false,error:"用户名应为6~16位数组和字母组成"},
+                pwd: {value: "[[${pwd}]]", flag: false,error:"密码的长度至少为8位"},
+                rpwd: {value: "[[${rpwd}]]", flag: false,error:"密码两次输入不一致"},
+                email: {value: "[[${email}]]", flag: false,error:"请输入正确的邮箱格式"},
+                c: "[[${code}]]",
+                errorMsg:"[[${errorMsg==null?'请输入正确的验证码':'验证码错误，重新输入'}]]",
+                codeSrc:"randcode"
+            },
+            methods: {
+                check_infoac() {
+                    var reg = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/;
+                    if (this.name.value !== "") {
+                        this.name.flag = reg.test(this.name.value);
+                        //在格式通过验证之后还得通过用户唯一性验证(发送一步请求)
+                    }
+                    if(this.name.flag)
+                    {
+                        axios({
+                            method: "post",
+                            url: "user",
+                            params: {
+                                flag: "check_username",
+                                username: this.name.value
+                            }
+                        }).then(response => {
+                            if (response.data.flag) {
+                                this.name.error = "√";
+                            } else {
+                                this.name.error = "用户名重复，请重新输入";
+                                this.name.flag=false;
+                            }
+                        });
+                    }
+                    else{
+                        this.name.error="用户名应为6~16位数组和字母组成";
+                    }
+                },
+                check_infopwd() {
+                    var reg = /^.{8,}/;
+                    if (this.pwd.value !== "")
+                        this.pwd.flag = reg.test(this.pwd.value);
+                    if(this.pwd.flag===true) {
+                        this.pwd.error = "√";
+                    }
+                    else{
+                        this.pwd.error="密码的长度至少为8位";
+                    }
+                },
+                check_inforpwd() {
+                    this.rpwd.flag = (this.pwd.value === this.rpwd.value && this.pwd !== "");
+                    if(this.rpwd.flag===true){
+                        this.rpwd.error="√";
+                    }
+                    else{
+                        this.rpwd.error="密码两次输入不一致";
+                    }
+                },
+                check_email() {
+                    var reg = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+                    if (this.email.value !== "")
+                        this.email.flag = reg.test(this.email.value);
+                    if(this.email.flag===true){
+                        this.email.error="√";
+                    }
+                    else
+                    {
+                        this.email.error="请输入正确的邮箱格式";
+                    }
+                },
+                // check_c() {
+                //     this.c.flag = (this.c.value === "bnbnp");
+                // },
+                check_all() {
+                    if (!(this.name.flag && this.pwd.flag && this.rpwd.flag && this.email.flag)) {
+                        event.preventDefault();
+                    }
+                },
+                change_img(){
+                    //更换验证码
+                    this.codeSrc="randcode?aa="+new Date();
+                }
+            }
+        }
+    )
+</script>
+</body>
+
+</html>

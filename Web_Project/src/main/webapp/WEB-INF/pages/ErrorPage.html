@@ -1,0 +1,64 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="@{/}">
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <style>
+        .head_head {
+            display: inline-block;
+            /*background-color: red;*/
+            color: red;
+            font-size: 40px;
+            text-decoration: none;
+            /*padding: 50px 50px;*/
+            /* 水平居中 */
+            text-align: center;
+            /* 垂直居中 */
+            display: flex;
+            bottom: 0;
+            align-items: center;
+            justify-content: center;
+        }
+        .head_head2 {
+            display: inline-block;
+            /*background-color: white;*/
+            /*color: red;*/
+            /*font-size: 60px;*/
+            /*text-decoration: none;*/
+            padding: 380px 380px;
+            /* 水平居中 */
+            text-align: center;
+            /* 垂直居中 */
+            display: flex;
+            bottom: 0;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .head_last {
+            display: inline-block;
+            /*background-color: olivedrab;*/
+            color: green;
+            font-size: 40px;
+            text-decoration: none;
+            padding: 5px 10px;
+            /* 水平居中 */
+            text-align: center;
+            /* 垂直居中 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body background="static/img/403.png" style="background-repeat:no-repeat;
+               background-attachment:fixed;
+               background-size:100% 100%;">
+<div class="head_head2"> </div>
+<div class="head_head">系统正在更新中，请稍后.......</div>
+<p th:text="${error}"></p>
+<!--<div class="head_last">-->
+<!--    <a href="index.html">返回书城</a>-->
+<!--</div>-->
+</body>
+</html>

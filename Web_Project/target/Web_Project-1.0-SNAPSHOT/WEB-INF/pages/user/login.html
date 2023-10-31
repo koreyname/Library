@@ -1,0 +1,110 @@
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="@{/}">
+    <meta charset="UTF-8"/>
+    <title>源味书屋会员登录页面</title>
+    <link type="text/css" rel="stylesheet" href="static/css/style.css"/>
+    <script src="static/script/vue.js"></script><!-- 自己解决-->
+</head>
+<body>
+<div id="app">
+    <div id="login_header">
+        <a href="index.html">
+            <img class="logo_img" alt="" src="static/img/logo.gif"/>
+        </a>
+    </div>
+
+    <div class="login_banner">
+        <div id="l_content">
+            <span class="login_box">欢迎登录</span>
+        </div>
+
+        <div id="content">
+            <div class="login_form">
+                <div class="login_box">
+                    <div class="tit">
+                        <h1>源味书屋会员</h1>
+                    </div>
+                    <div class="msg_cont">
+                        <b></b>
+                        <span class="errorMsg">{{errormsg}}</span>
+                    </div>
+                    <div class="form">
+                        <form action="user?flag=Login" @submit="check_info" method="post"><!-- 添加取消控件默认-->
+                            <label>用户名称：</label>
+                            <input
+                                    class="itxt"
+                                    type="text"
+                                    placeholder="请输入用户名"
+                                    autocomplete="off"
+                                    tabindex="1"
+                                    name="name"
+                                    id="username"
+                                    v-model="elm.acc"
+                                    @click="check_info"
+                            />
+                            <br/>
+                            <br/>
+                            <label>用户密码：</label>
+                            <input
+                                    class="itxt"
+                                    type="password"
+                                    placeholder="请输入密码"
+                                    autocomplete="off"
+                                    tabindex="1"
+                                    name="pwd"
+                                    id="password"
+                                    v-model="elm.pass"
+                                    th:value="${pwd}"
+                                    @click="check_info"
+                            />
+                            <br/>
+                            <br/>
+                            <input type="submit" value="登录" id="sub_btn"/>
+                        </form>
+                        <div class="tit">
+                            <a href="user?flag=toRegistPage">立即注册</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="bottom">
+      <span>
+        源味书屋书城.create in 2023
+      </span>
+    </div>
+</div>
+<script>
+    new Vue({
+            el: "#app",
+            data: {
+                elm: {acc:"[[${username}]]",
+                    pass:"[[${pwd}]]"
+                },
+                errormsg:"[[${errMsg==null?'请输入用户名和密码':errMsg}]]",
+            },
+            methods: {
+                check_info() {
+                    if(this.elm.acc===""||this.elm.pass==="") {
+                        if (this.elm.acc === ""&&this.elm.pass!=="") {
+                            this.errormsg = "请输入用户名";
+                        } else if (this.elm.pass === ""&&this.elm.acc!=="")
+                            this.errormsg = "请输入密码";
+                        else if(this.elm.pass===""&&this.elm.acc===""){
+                            this.errormsg="请输入用户名和密码";
+                        }
+                        event.preventDefault();
+                    }
+                    else{
+                        this.errormsg="√";
+                    }
+                },
+            }
+        }
+    )
+</script>
+</body>
+</html>

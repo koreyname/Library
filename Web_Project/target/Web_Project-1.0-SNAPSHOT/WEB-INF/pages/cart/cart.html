@@ -1,0 +1,217 @@
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <base th:href="@{/}">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Document</title>
+    <link rel="stylesheet" href="static/css/minireset.css"/>
+    <link rel="stylesheet" href="static/css/common.css"/>
+    <link rel="stylesheet" href="static/css/cart.css"/>
+    <script src="static/script/vue.js"></script>
+    <script src="static/script/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="header">
+        <div class="w">
+            <div class="header-left">
+                <a href="index.html">
+                    <img src="static/img/logo.gif" alt=""
+                    /></a>
+                <h1>我的购物车</h1>
+            </div>
+            <div class="header-right">
+                <h3>欢迎<span th:text="${session.user.name}">张总</span>光临源味书屋</h3>
+                <div class="order"><a href="Order?flag=toOrderPage">我的订单</a></div>
+                <div class="destory"><a href="user?flag=LogOut">注销</a></div>
+                <div class="gohome">
+                    <a href="index.html">返回</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list">
+        <div class="w">
+            <table>
+                <thead>
+                <tr>
+                    <th>图片</th>
+                    <th>商品名称</th>
+                    <th>数量</th>
+                    <th>单价</th>
+                    <th>金额</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-if="totalCount===0">
+                    <td colspan="6" align="center" style="color:red">购物车为空，请继续购物</td>
+                </tr>
+                <tr v-for="(cartItem,index) in cartItems">
+                    <td>
+                        <img :src="cartItem.boo.imgPath" alt=""/>
+                    </td>
+                    <td>{{cartItem.boo.bookName}}</td>
+                    <td>
+                        <span class="count" @click="subCount">-</span>
+                        <input class="count-num" type="text" v-model="cartItem.count" :name="cartItem.boo.bookId" @Change="changeCount"/>
+                        <span class="count" @click="addCount">+</span>
+                    </td>
+                    <td>{{cartItem.boo.price}}</td>
+                    <td>{{cartItem.amount}}</td>
+                    <td><a href="" @click="deleteCartItem" :name="cartItem.boo.bookId">删除</a></td>
+                </tr>
+
+                </tbody>
+            </table>
+            <div class="footer">
+                <div class="footer-left">
+                    <a href="cart?flag=clearCart" class="clear-cart">清空购物车</a>
+                    <a href="#">继续购物</a>
+                </div>
+                <div class="footer-right">
+                    <div>共<span>{{totalCount}}</span>件商品</div>
+                    <div class="total-price">总金额<span>{{totalAmount}}</span>元</div>
+                    <a class="pay" href="Order?flag=createOrder" @click="check_null">去结账</a>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="down">
+            源味书屋.Copyright ©2015
+        </div>
+    </div>
+</div>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            cartItems: [],
+            totalCount: 0,
+            totalAmount: 0,
+        },
+        methods: {
+            //showCart什么时候被调用？在Vue对象创建后，挂载前执行(钩子函数)
+            showCart: function () {
+                //往后台发送异步请求，拿到数据(必须在本页面渲染之前拿到数据)，展示在网页上
+                //alert("Vue对象创建后执行");
+                axios({
+                    method: "post",
+                    url: "cart",
+                    params: {
+                        flag: "showCart",
+                    }
+                }).then(response => {
+                    if (response.data.flag) {
+                        //alert(response.data.resultData[0]);
+                        //需要将后台传过来的数据，展示在网页上(vue的方式)
+                        this.cartItems = response.data.resultData[0];
+                        this.totalCount = response.data.resultData[1];
+                        this.totalAmount = response.data.resultData[2];
+                    }
+                });
+            },
+            deleteCartItem: function () {
+                var name = event.target.name;
+                //阻止跳转
+                event.preventDefault();
+                // alert(name);
+                axios({
+                    method: "post",
+                    url: "cart",
+                    params: {
+                        flag: "deleteCartItem",
+                        id: name,
+                    }
+                }).then(response => {
+                    if (response.data.flag) {
+                        //alert(response.data.resultData[0]);
+                        //需要将后台传过来的数据，展示在网页上(vue的方式)
+                        this.cartItems = response.data.resultData[0];
+                        this.totalCount = response.data.resultData[1];
+                        this.totalAmount = response.data.resultData[2];
+                    }
+                });
+            },
+            addCount:function (){
+                var tar=event.target.previousElementSibling.name;
+                // alert(tar);
+                axios({
+                    method:"post",
+                    url:"cart",
+                    params:{
+                        flag:"addCount",
+                        id:tar,
+                    }
+                }).then(response=>{
+                    if (response.data.flag) {
+                        //alert(response.data.resultData[0]);
+                        //需要将后台传过来的数据，展示在网页上(vue的方式)
+                        this.cartItems = response.data.resultData[0];
+                        this.totalCount = response.data.resultData[1];
+                        this.totalAmount = response.data.resultData[2];
+                    }
+                });
+            },
+            subCount: function () {
+                var tar = event.target.nextElementSibling.name;
+                axios({
+                    method: "post",
+                    url: "cart",
+                    params: {
+                        flag: "subCount",
+                        id: tar,
+                    }
+                }).then(response => {
+                    if (response.data.flag) {
+                        //alert(response.data.resultData[0]);
+                        //需要将后台传过来的数据，展示在网页上(vue的方式)
+                        this.cartItems = response.data.resultData[0];
+                        this.totalCount = response.data.resultData[1];
+                        this.totalAmount = response.data.resultData[2];
+                    }
+                });
+            },
+            changeCount: function () {
+                var tar = event.target.name;
+               var change=event.target.value;
+               // alert(change);
+                var reg=/^\d+$/;
+                if(reg.test(change)) {
+                    axios({
+                        method: "post",
+                        url: "cart",
+                        params: {
+                            flag: "changeCount",
+                            id: tar,
+                            count: change,
+                        }
+                    }).then(response => {
+                        if (response.data.flag) {
+                            //alert(response.data.resultData[0]);
+                            //需要将后台传过来的数据，展示在网页上(vue的方式)
+                            this.cartItems = response.data.resultData[0];
+                            this.totalCount = response.data.resultData[1];
+                            this.totalAmount = response.data.resultData[2];
+                        }
+                    });
+                }
+                else{
+                    alert("请输入正确的数字");
+                }
+            },
+            check_null(){
+                if(this.totalCount<=0){
+                    event.preventDefault();
+                }
+            }
+
+        },
+        created: function () {
+            this.showCart();
+        }
+    })
+</script>
+</body>
+</html>

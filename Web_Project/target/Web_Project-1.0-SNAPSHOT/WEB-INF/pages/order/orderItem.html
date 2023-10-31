@@ -1,0 +1,68 @@
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <base th:href="@{/}">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>我的订单</title>
+    <link rel="stylesheet" href="static/css/minireset.css" />
+    <link rel="stylesheet" href="static/css/common.css" />
+    <link rel="stylesheet" href="static/css/cart.css" />
+    <link rel="stylesheet" href="static/css/bookManger.css" />
+    <link rel="stylesheet" href="static/css/orderManger.css" />
+</head>
+  <body>
+    <div class="header">
+      <div class="w">
+        <div class="header-left">
+          <a href="index.html">
+            <img src="static/img/logo.gif" alt=""
+          /></a>
+          <h1>我的订单</h1>
+        </div>
+        <div class="header-right">
+          <h3>欢迎<span th:text="${session.user.name}">张总</span>光临源味书屋</h3>
+          <div class="order"><a href="Order?flag=toOrderPage" @click="check_session">我的订单</a></div>
+          <div class="destory"><a href="user?flag=LogOut">注销</a></div>
+          <div class="gohome">
+            <a href="Order?flag=toOrderPage">返回</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="list">
+      <div class="w">
+        <table>
+          <thead>
+            <tr>
+              <th>书号</th>
+              <th>书名</th>
+              <th>价格</th>
+              <th>书籍</th>
+              <th>购买数量</th>
+              <th>总金额</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="item,status :${allIterm}">
+              <td th:text="${item.itemId}">12354456895</td>
+              <td th:text="${item.bookName}">
+                2015.04.23
+              </td>
+              <td th:text="${item.price}">90.00</td>
+              <td>
+                <img th:src="${item.imgPath}" alt="" />
+              </td>
+              <td th:text="${item.itemCount}"></td>
+              <td th:text="${item.itemAmount}">查看详情</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div style="text-align: center;">
+      源味书屋.Created in 2023
+    </div>
+    </div>
+  </body>
+</html>
