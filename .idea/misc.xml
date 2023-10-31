@@ -1,0 +1,24 @@
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/demo/pom.xml" />
+        <option value="$PROJECT_DIR$/demo2/pom.xml" />
+        <option value="$PROJECT_DIR$/Libaray_project/pom.xml" />
+        <option value="$PROJECT_DIR$/Library_project/pom.xml" />
+        <option value="$PROJECT_DIR$/LIbraray/pom.xml" />
+        <option value="$PROJECT_DIR$/exser_soldier/pom.xml" />
+        <option value="$PROJECT_DIR$/temp/pom.xml" />
+        <option value="$PROJECT_DIR$/Library/pom.xml" />
+        <option value="$PROJECT_DIR$/libra/pom.xml" />
+        <option value="$PROJECT_DIR$/LIbrary_demo/pom.xml" />
+        <option value="$PROJECT_DIR$/Web_Project/pom.xml" />
+        <option value="$PROJECT_DIR$/maven_demo/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/ultra/out" />
+  </component>
+</project>

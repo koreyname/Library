@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/demo2_war/"/>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <input type="button"  value="按钮" @click="ajaxTest">
+</div>
+<script>
+    new Vue({
+        el: "#app",
+        data: {},
+        methods: {
+            ajaxTest(){
+                axios({
+                    method:"post",
+                    url:"ajax",
+                    params:{
+                    username:"张三",
+                    pass:"李四",}
+                }).then(response=>{
+                    alert("成功"+response.data);
+                }).catch(error=>{
+            alert("服务器异常");
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>

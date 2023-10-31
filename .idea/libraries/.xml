@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="验证码">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Web_Project/src/main/webapp/lib/kaptcha-2.3.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
