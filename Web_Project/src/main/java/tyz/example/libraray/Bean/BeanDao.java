@@ -15,7 +15,7 @@ public class BeanDao extends BasedDao{
     }
 
     public <T> List<T> findAllBySomeThing(Class<T> clazz, String sql,Object ...args) throws SQLException {
-        return qr.query(sql, new BeanListHandler<T>(clazz),args);
+         return qr.query(sql, new BeanListHandler<T>(clazz),args);
     }
 
 }
